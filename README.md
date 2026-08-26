@@ -87,7 +87,8 @@ comparing spectra taken at different temperatures without correction produces fa
 
 Built by Laurynas Misiūnas, an electronics engineer in Klaipėda district, Lithuania, with
 six years of industrial experience deploying edge AI vision systems and embedded
-controllers on production lines.
+controllers on production lines. Developed with the support of the Klaipėda Science and
+Technology Park (KMTP) innovation support programme.
 
 Contributions, review and questions are welcome — open an issue.
 
