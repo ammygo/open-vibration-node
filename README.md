@@ -90,3 +90,14 @@ six years of industrial experience deploying edge AI vision systems and embedded
 controllers on production lines.
 
 Contributions, review and questions are welcome — open an issue.
+
+## Transparency: use of generative AI
+
+Engineering decisions, architecture and project direction in this repository are made by
+the author. Documentation and English-language texts are drafted with the assistance of a
+large language model (Anthropic Claude) and reviewed, corrected and approved by the author
+before publication. Commits with LLM-assisted content carry a `Co-Authored-By: Claude`
+trailer. Details in [TRANSPARENCY.md](TRANSPARENCY.md).
+
+No firmware, hardware design files or measurement data will be presented as project
+deliverables without human authorship and verification.
