@@ -22,12 +22,12 @@
 | 0 | 1 | Version + message type | high nibble: protocol version (0); low nibble: type (0 = periodic summary) |
 | 1 | 1 | Sequence number | uint8, wraps at 255 |
 | 2–3 | 2 | RMS acceleration | uint16, 0.1 mg units (0 – 6553.5 mg) |
-| 4–5 | 2 | Peak acceleration | uint16, 0.1 mg units |
-| 6–8 | 3 | Spectral peak 1 | frequency uint16 (Hz) + amplitude uint8 (0.5 dB steps re 1 mg) |
+| 4–5 | 2 | Peak acceleration | uint16, 0.25 mg units (0 – 16383.75 mg — covers the full ±8 g range) |
+| 6–8 | 3 | Spectral peak 1 | frequency uint16 (Hz) + amplitude uint8 (0.5 dB steps re 0.1 mg) |
 | 9–11 | 3 | Spectral peak 2 | same encoding |
 | 12–14 | 3 | Spectral peak 3 | same encoding |
 | 15–16 | 2 | Die temperature | int16, 0.1 °C units |
-| 17 | 1 | Battery voltage | uint8, 20 mV steps from 2.0 V (covers 2.00 – 7.10 V) |
+| 17 | 1 | Battery voltage | uint8, 20 mV steps from 2.0 V (covers 2.00 – 7.10 V) — *requires a battery sense divider, planned for the next board revision; current boards route BATT+ to the LDO only* |
 | 18 | 1 | Status flags | bitfield, see below |
 | 19–23 | 5 | Reserved | zero-filled; candidates: ISO-style band energies, event counters |
 
@@ -49,11 +49,26 @@ A node should assert its own configuration in every message it sends.
 
 ## Scale-factor rationale
 
-- 0.1 mg resolution over a uint16 covers the sensor's full ±8 g range headroom for RMS
-  while resolving the ~18 mg bench noise floor with margin.
+- RMS at 0.1 mg per uint16 tops out at 6553.5 mg — above the physical RMS ceiling of a
+  ±8 g sensor (8000/√2 ≈ 5657 mg), so the field cannot overflow, while still resolving
+  the ~18 mg bench noise floor with margin.
+- Peak uses a coarser 0.25 mg step because a peak *can* reach the full ±8 g (8000 mg);
+  a 0.1 mg step in a uint16 would clip at 6553.5 mg on hard impacts. The clipping flag
+  (bit 2) then indicates true sensor saturation, not encoding overflow.
+- Spectral amplitude is referenced to **0.1 mg**, not 1 mg: early bearing defects on a
+  quiet machine sit at 0.3–1 mg, and the per-bin noise floor at 13 Hz bins is
+  75 µg/√Hz × √13 ≈ 0.27 mg — an unsigned dB value re 1 mg could not represent any of
+  that. Re 0.1 mg, one byte at 0.5 dB steps spans 0.1 mg to well beyond sensor range.
 - Frequency as plain uint16 Hz covers the DC–6.3 kHz analysis band without a lookup table.
-- Amplitude in 0.5 dB steps spans ~127 dB — more than the sensor's dynamic range — in one
-  byte.
+
+## Acquisition requirement for spectral fields
+
+Spectral peak frequencies are only meaningful if samples are taken at strictly uniform
+26.667 kHz intervals. Polled register reads measured on the current firmware reach
+14–17 kS/s — sufficient for RMS statistics, **not** for FFT. Acquisition for the spectral
+fields must therefore use the sensor's 3 KB FIFO with burst reads, which guarantees
+uniform sampling regardless of host timing. The reference firmware will treat this as a
+hard requirement.
 
 ## Open questions
 
