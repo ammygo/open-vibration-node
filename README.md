@@ -91,8 +91,9 @@ signal fidelity than any amount of filtering afterwards.
 |---|---|
 | `firmware/tests/` | Bench verification sketches — sensor identification and acquisition |
 | `docs/` | Measurements, methodology, build notes |
+| `enclosure/` | Mounting pad and enclosure — parametric sources and exported meshes |
+| `tools/` | Design-check utilities, including a mirrored-footprint checker |
 | `hardware/` | Schematics and design files (published as they mature) |
-| `enclosure/` | 3D-printable enclosure — source models and exported meshes |
 
 ## Licences
 
