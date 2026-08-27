@@ -35,6 +35,19 @@ hertz — which rules out the 1–6 kHz region where bearing faults first appear
 missing is a node that combines the bandwidth needed for real diagnostics with local-first
 operation and documentation good enough to rebuild it. This project aims to be that node.
 
+## How this compares with existing work
+
+| Approach | Usable bandwidth | Power / connectivity | Openness |
+|---|---|---|---|
+| Commercial condition-monitoring systems | Full (piezo-based) | Battery or wired; vendor cloud mandatory | Closed end to end; per-point pricing plus subscription |
+| Open builds on consumer MEMS (ADXL345 / LIS3DH class) | ~200–800 Hz | Battery; various | Open, but physically blind to the 1–6 kHz bearing-fault region |
+| Wired piezo + DAQ setups | Full | Mains power and cabling per point | Mixed; cabling dominates per-point cost |
+| **This project** | **DC–6.3 kHz (IIS3DWB)** | **Battery + LoRa; local-first, no mandatory cloud** | **Open: hardware, firmware, docs, production files** |
+
+Open lab-instrument projects — open microscopes, open test equipment — have already shown
+that *laboratory-grade but open and rebuildable* is a workable model. This project applies
+that model to industrial vibration monitoring.
+
 ## Design goals
 
 These are the goals the design is being built towards, not a description of what already
@@ -107,7 +120,7 @@ signal fidelity than any amount of filtering afterwards.
 | Path | Contents |
 |---|---|
 | `firmware/tests/` | Bench verification sketches — sensor identification and acquisition |
-| `docs/` | Measurements, methodology, build notes |
+| `docs/` | Measurements, payload specification draft, build notes |
 | `enclosure/` | Mounting pad and housing — CAD sources with open-format exports |
 | `tools/` | Design-check utilities, including a mirrored-footprint checker |
 | `hardware/` | KiCad boards plus gerbers, BOM and pick-and-place files for both boards |
@@ -120,15 +133,19 @@ signal fidelity than any amount of filtering afterwards.
 
 ## Roadmap
 
-1. ~~Sensor board validated on hardware~~ — done, see [measurements](docs/measurements.md)
-2. Radio bring-up: SX1262 transmit and receive path
+Timing is indicative and assumes part-time development; with project funding it compresses.
+
+1. ~~Sensor board validated on hardware~~ — done, August 2026 ([measurements](docs/measurements.md))
+2. Radio bring-up: SX1262 transmit and receive path — autumn 2026
 3. Mechanical integration: sensor coupling, sealing, field-ready housing (pad and housing
-   models [published](enclosure/); sealing details in progress)
+   models [published](enclosure/); sealing details in progress) — winter 2026/27
 4. On-device FFT and envelope processing, LoRa uplink with a versioned payload format
-   (LoRaWAN under evaluation)
-5. Characterisation against a reference accelerometer on a shaker
-6. Field deployment on real rotating equipment, with published measurement data
-7. Documented reproducible build — someone else assembles a node from this repository
+   ([draft specification](docs/payload-spec.md); LoRaWAN under evaluation) — spring 2027
+5. Characterisation against a reference accelerometer on a shaker — spring/summer 2027
+6. Field deployment on real rotating equipment, with published measurement data — second
+   half of 2027
+7. Documented reproducible build — someone else assembles a node from this repository —
+   late 2027
 
 ## About
 
@@ -137,7 +154,7 @@ six years of industrial experience deploying edge AI vision systems and embedded
 controllers on production lines. Developed with the support of the Klaipėda Science and
 Technology Park (KMTP) innovation support programme.
 
-Contributions, review and questions are welcome — open an issue.
+Contributions, review and questions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue.
 
 ## Transparency: use of generative AI
 
