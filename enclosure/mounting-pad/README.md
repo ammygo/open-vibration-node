@@ -4,7 +4,7 @@ A threaded pad that screws into a machine housing and carries the sensor board.
 
 > **Version 1 — known limitation.** This revision has a flat top face and **no pocket for
 > the accelerometer**. The IIS3DWB package sits about 0.9 mm below the underside of the
-> sensor board, so it will contact a flat pad. A recess of Ø6–8 mm and 1.5–2 mm depth in
+> sensor board, so it will contact a flat pad. A recess of Ø8–10 mm and about 2 mm depth in
 > the centre of the top face is required. Existing pads can be drilled by hand; the next
 > revision will include the pocket in the source model.
 
