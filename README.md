@@ -91,7 +91,7 @@ signal fidelity than any amount of filtering afterwards.
 |---|---|
 | `firmware/tests/` | Bench verification sketches — sensor identification and acquisition |
 | `docs/` | Measurements, methodology, build notes |
-| `enclosure/` | Mounting pad and enclosure — parametric sources and exported meshes |
+| `enclosure/` | Mounting pad and housing — CAD sources with open-format exports |
 | `tools/` | Design-check utilities, including a mirrored-footprint checker |
 | `hardware/` | Schematics and design files (published as they mature) |
 
@@ -104,7 +104,8 @@ signal fidelity than any amount of filtering afterwards.
 ## Roadmap
 
 1. ~~Sensor and radio validated on hardware~~ — done, see [measurements](docs/measurements.md)
-2. Mechanical integration: sensor coupling, enclosure, sealing
+2. Mechanical integration: sensor coupling, sealing, field-ready housing (pad and housing
+   models [published](enclosure/); sealing details in progress)
 3. On-device FFT and envelope processing, LoRaWAN uplink with a versioned payload format
 4. Characterisation against a reference accelerometer on a shaker
 5. Field deployment on real rotating equipment, with published measurement data
