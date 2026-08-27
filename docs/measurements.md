@@ -29,6 +29,11 @@ Gravity, orientation, identification and settling behaviour are unaffected by th
 correction below. The tap-test amplitudes were recorded during initial bring-up and
 demonstrate dynamic range and settling rather than absolute amplitude at full bandwidth.
 
+![Serial output of the self-check demo](images/bench-demo-output.jpg)
+
+*The `bench_demo` sketch reporting identity, configuration read-back, gravity vector and
+noise floor, followed by live samples — the spikes are taps on the bench surface.*
+
 ## What these numbers mean
 
 The sign of the gravity reading flips correctly when the board is inverted and the

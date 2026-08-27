@@ -11,6 +11,11 @@ radio link (LoRa), with no mandatory cloud service.
 > host MCU for those tests; the SX1262 radio has not yet been brought up. Mechanical
 > integration and the signal-processing firmware are the current work.
 
+![Both boards, both sides, with a ruler for scale](docs/images/boards-both-sides.jpg)
+
+*The two 28 mm boards that make up a node — sensor board and radio board, both sides.
+More photographs: [docs/images](docs/images/).*
+
 ## Why this project exists
 
 Predictive maintenance works: measuring vibration on motors, bearings, pumps and fans
@@ -75,6 +80,11 @@ with the SX1262 in one certified module means a single component instead of MCU 
 plus RF matching, and no antenna network to design. The trade-off is board area in
 exchange for reproducibility and a simpler certification path — a deliberate choice for a
 project that others are meant to be able to rebuild.
+
+![Every part of a node laid out](docs/images/exploded-view.jpg)
+
+*Everything that goes into one node: the two boards, primary cell, energy buffer,
+antennas, printed housing and the aluminium mounting pad.*
 
 ### Board architecture
 

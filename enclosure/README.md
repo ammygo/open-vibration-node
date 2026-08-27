@@ -7,6 +7,13 @@ Licence: CERN-OHL-W-2.0 (same terms as `../hardware`); documentation CC-BY-SA-4.
 | `mounting-pad/` | Threaded pad coupling the sensor board to the machine surface — published |
 | `housing/` | Sensor housing, revision 3 — published, sealing details in progress |
 
+![Node alongside the aluminium mounting pad](../docs/images/node-and-mounting-pad.jpg)
+
+*The node screws onto the pad by its M6 stud; the pad is turned into the machine housing.
+Assembled views: [upright](../docs/images/assembled-node-upright.jpg),
+[side](../docs/images/assembled-node-side.jpg),
+[opened](../docs/images/housing-open.jpg).*
+
 ## Design notes
 
 The enclosure has to do three things at once: transmit vibration faithfully from the

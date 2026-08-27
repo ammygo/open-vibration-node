@@ -30,6 +30,11 @@ in ways worth knowing before you rebuild:
 If you intend to modify either design, start from the gerbers for what was built and treat
 the KiCad files as the placement reference.
 
+![Both boards, both sides](../docs/images/boards-both-sides.jpg)
+
+*Sensor board (bottom row) and radio board (top row), both sides. The accelerometer sits
+on the underside of the sensor board; the RAK3112 module on the top of the radio board.*
+
 ## Inter-board wiring
 
 `GND`, `3V3`, `SPI_CS`, `SPI_SCK`, `SPI_MISO`, `SPI_MOSI`, `INT1`.
