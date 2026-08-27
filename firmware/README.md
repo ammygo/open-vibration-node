@@ -6,7 +6,7 @@ Licence: MIT — see [../LICENSE](../LICENSE).
 
 ## Contents
 
-Nothing published yet. This directory will hold:
+Bench sketches are under `tests/`. Still to come:
 
 - `src/` — application and signal processing sources
 - `drivers/` — sensor and peripheral drivers
