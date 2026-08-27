@@ -1,8 +1,8 @@
 # Open Vibration Node
 
 An open hardware and open firmware vibration sensing node for industrial condition
-monitoring — analysing vibration **on the device** and reporting results over a long-range
-radio link (LoRa), with no mandatory cloud service.
+monitoring — analysing vibration **on the device** and reporting results over LoRaWAN to a
+gateway you run yourself, with no mandatory cloud service.
 
 > **Status: sensor board verified, radio path not yet exercised.** The second-generation
 > sensor board has been manufactured and verified on the bench — the sensor identifies
@@ -57,9 +57,11 @@ works — see the status above.
   results leave the device — a compact payload of dominant frequencies, amplitudes, RMS
   and temperature (target: under 24 bytes), not raw waveforms. This is what makes
   battery-powered operation over a low-bandwidth radio possible at all.
-- **Local-first.** The intended integration is LoRaWAN with a self-hosted network server;
-  the protocol choice is still being evaluated. No account, no vendor cloud, no remote kill
-  switch. Cloud services are optional, never required.
+- **Local-first.** LoRaWAN with a self-hosted [ChirpStack](https://www.chirpstack.io/)
+  network server: the reference gateway is a Raspberry Pi 5 with an SX1302 eight-channel
+  concentrator, and everything from radio to database runs on hardware the operator owns.
+  No account, no vendor cloud, no remote kill switch. Cloud services are optional, never
+  required.
 - **Auditable and reproducible.** Schematics, bill of materials, firmware source and
   enclosure models under free licences, with build documentation detailed enough to
   reproduce a working node.
@@ -115,6 +117,21 @@ Placing the accelerometer on the bottom layer is deliberate — it shortens the 
 path between the measured surface and the sensing element, which matters far more for
 signal fidelity than any amount of filtering afterwards.
 
+### Two data paths
+
+A node normally sends only a spectral summary — a payload of a couple of dozen bytes,
+which is what makes years of battery life on a low-bandwidth radio possible at all. That
+summary is enough to trend a machine's condition, but not to investigate a fault in detail.
+
+So the node keeps a second path. The RAK3112 carries 8 MB of PSRAM, enough to hold about
+50 seconds of the full 26.667 kHz three-axis stream. When something in the trend needs
+looking at, an engineer standing next to the machine can trigger a capture and pull the
+raw recording off over WiFi, straight to a laptop — no cloud and no gateway involved.
+
+This is deliberately **on demand** rather than continuous: streaming raw data would end the
+battery budget within days. Routine monitoring stays cheap; full detail is available when
+it is actually needed.
+
 ## Repository layout
 
 | Path | Contents |
@@ -139,8 +156,8 @@ Timing is indicative and assumes part-time development; with project funding it 
 2. Radio bring-up: SX1262 transmit and receive path — autumn 2026
 3. Mechanical integration: sensor coupling, sealing, field-ready housing (pad and housing
    models [published](enclosure/); sealing details in progress) — winter 2026/27
-4. On-device FFT and envelope processing, LoRa uplink with a versioned payload format
-   ([draft specification](docs/payload-spec.md); LoRaWAN under evaluation) — spring 2027
+4. On-device FFT and envelope processing, LoRaWAN uplink with a versioned payload format
+   ([draft specification](docs/payload-spec.md)) — spring 2027
 5. Characterisation against a reference accelerometer on a shaker — spring/summer 2027
 6. Field deployment on real rotating equipment, with published measurement data — second
    half of 2027

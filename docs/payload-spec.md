@@ -6,7 +6,7 @@
 
 ## Goals
 
-- Fit comfortably inside LoRa duty-cycle and airtime limits: **24 bytes maximum**, so a
+- Fit comfortably inside LoRaWAN duty-cycle and airtime limits: **24 bytes maximum**, so a
   single uplink carries a complete measurement summary even at slow spreading factors.
 - Carry **results, not waveforms**: the node runs FFT and envelope analysis locally and
   transmits a spectral summary. Raw data never has to leave the device.
@@ -77,8 +77,8 @@ hard requirement.
 2. Fixed spectral peaks vs ISO 10816-style band energies in the reserved bytes — peaks
    localise faults, bands trend severity; possibly both.
 3. Downlink: configuration channel format (measurement interval, scale, band definitions).
-4. Whether application-layer integrity is needed on top of LoRaWAN's, for LoRa-without-
-   LoRaWAN deployments.
+4. Whether application-layer integrity is needed on top of the LoRaWAN MIC, for
+   deployments where the network server is not under the operator's control.
 
 ## Reference decoder
 
