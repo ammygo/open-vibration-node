@@ -13,6 +13,23 @@ The `production/` files under each board are the sets actually sent for fabricat
 assembly — not idealised exports. Boards from these files have been manufactured and the
 sensor board verified on the bench ([measurements](../docs/measurements.md)).
 
+### What the KiCad sources are and are not
+
+**The gerbers are the authoritative artifact** — they are what was manufactured. The KiCad
+files are the design sources behind them, and on both boards they differ from the gerbers
+in ways worth knowing before you rebuild:
+
+- **Sensor board** — fully routed, but one CS track and its via sit about 0.1 mm from
+  where the manufactured gerbers place them. The final clearance fix was applied in the
+  export tool rather than back-annotated to KiCad. Electrically identical; regenerating
+  gerbers from KiCad will not produce a byte-identical set.
+- **Radio board** — carries **placement and netlist only, with no routing**. The routing
+  was done in the export tool and exists solely in the gerbers. Opening this file will
+  show an unrouted board; that is the actual state of the source, not a damaged file.
+
+If you intend to modify either design, start from the gerbers for what was built and treat
+the KiCad files as the placement reference.
+
 ## Inter-board wiring
 
 `GND`, `3V3`, `SPI_CS`, `SPI_SCK`, `SPI_MISO`, `SPI_MOSI`, `INT1`.

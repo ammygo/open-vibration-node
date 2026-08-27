@@ -110,14 +110,15 @@ signal fidelity than any amount of filtering afterwards.
 
 ## Roadmap
 
-1. ~~Sensor and radio validated on hardware~~ — done, see [measurements](docs/measurements.md)
-2. Mechanical integration: sensor coupling, sealing, field-ready housing (pad and housing
+1. ~~Sensor board validated on hardware~~ — done, see [measurements](docs/measurements.md)
+2. Radio bring-up: SX1262 transmit and receive path
+3. Mechanical integration: sensor coupling, sealing, field-ready housing (pad and housing
    models [published](enclosure/); sealing details in progress)
-3. On-device FFT and envelope processing, LoRa uplink with a versioned payload format
+4. On-device FFT and envelope processing, LoRa uplink with a versioned payload format
    (LoRaWAN under evaluation)
-4. Characterisation against a reference accelerometer on a shaker
-5. Field deployment on real rotating equipment, with published measurement data
-6. Documented reproducible build — someone else assembles a node from this repository
+5. Characterisation against a reference accelerometer on a shaker
+6. Field deployment on real rotating equipment, with published measurement data
+7. Documented reproducible build — someone else assembles a node from this repository
 
 ## About
 
