@@ -85,7 +85,9 @@ void setup() {
   writeReg(REG_CTRL3_C, 0x01);       // SW_RESET
   delay(20);
   writeReg(REG_CTRL3_C, 0x44);       // BDU=1 (nesumaisyti baitu), IF_INC=1
-  writeReg(REG_CTRL1_XL, 0x2C);      // XL_EN=1 (26.7 kHz), skale +-8g
+  writeReg(REG_CTRL1_XL, 0xAC);      // XL_EN[2:0]=101 (bitai 7:5) = 26.7 kHz; FS=+-8g (bitai 3:2)
+                                     // PATAISA 2026-08-28: buvo 0x2C - nedokumentuota kombinacija,
+                                     // jutiklis realiai dirbo ~105 Hz, ne 26.7 kHz
   delay(10);
   Serial.println("Jutiklis ijungtas: 26.7 kHz, +-8g");
   Serial.println();

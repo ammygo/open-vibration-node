@@ -6,8 +6,8 @@ radio link (LoRa), with no mandatory cloud service.
 
 > **Status: sensor board verified, radio path not yet exercised.** The second-generation
 > sensor board has been manufactured and verified on the bench — the sensor identifies
-> correctly, gravity and impact-response tests pass, and the noise floor sits at ~1 mg RMS
-> ([measurements](docs/measurements.md)). The RAK3112 module has so far served only as the
+> correctly, gravity and impact-response tests pass, and the noise floor sits at ~18 mg RMS
+> across the full 6.3 kHz bandwidth on a bench ([measurements](docs/measurements.md)). The RAK3112 module has so far served only as the
 > host MCU for those tests; the SX1262 radio has not yet been brought up. Mechanical
 > integration and the signal-processing firmware are the current work.
 
