@@ -1,15 +1,15 @@
 # Open Vibration Node
 
 An open hardware and open firmware vibration sensing node for industrial condition
-monitoring — analysing vibration **on the device** and reporting results over LoRaWAN,
-with no mandatory cloud service.
+monitoring — analysing vibration **on the device** and reporting results over a long-range
+radio link (LoRa), with no mandatory cloud service.
 
-> **Status: hardware working, firmware in development.** The second-generation sensor
-> board has been manufactured and verified on the bench (sensor identifies correctly,
-> gravity and impact-response tests pass, noise floor ~1 mg RMS — see
-> [docs/measurements.md](docs/measurements.md)). Mechanical integration and the
-> FFT/LoRaWAN firmware are the current work. Design files are published here as they
-> mature.
+> **Status: sensor board verified, radio path not yet exercised.** The second-generation
+> sensor board has been manufactured and verified on the bench — the sensor identifies
+> correctly, gravity and impact-response tests pass, and the noise floor sits at ~1 mg RMS
+> ([measurements](docs/measurements.md)). The RAK3112 module has so far served only as the
+> host MCU for those tests; the SX1262 radio has not yet been brought up. Mechanical
+> integration and the signal-processing firmware are the current work.
 
 ## Why this project exists
 
@@ -24,17 +24,24 @@ hundreds of euros per measurement point, which puts continuous monitoring out of
 small manufacturers, municipal utilities, water pumping stations and building services —
 exactly the operators who can least afford an unplanned failure.
 
-There is no open, documented, reproducible node that a competent technician can build,
-audit, deploy and keep running independently. This project aims to be that node.
+Open vibration-monitoring projects do exist. The ones I have found stop at a development
+board on a desk, depend on a vendor cloud, or use accelerometers limited to a few hundred
+hertz — which rules out the 1–6 kHz region where bearing faults first appear. What is
+missing is a node that combines the bandwidth needed for real diagnostics with local-first
+operation and documentation good enough to rebuild it. This project aims to be that node.
 
 ## Design goals
+
+These are the goals the design is being built towards, not a description of what already
+works — see the status above.
 
 - **Analysis on the device.** FFT and envelope processing run on the node's MCU. Only
   results leave the device — a compact payload of dominant frequencies, amplitudes, RMS
   and temperature (target: under 24 bytes), not raw waveforms. This is what makes
   battery-powered operation over a low-bandwidth radio possible at all.
-- **Local-first.** A node works with a self-hosted LoRaWAN network server. No account, no
-  vendor cloud, no remote kill switch. Cloud services are optional, never required.
+- **Local-first.** The intended integration is LoRaWAN with a self-hosted network server;
+  the protocol choice is still being evaluated. No account, no vendor cloud, no remote kill
+  switch. Cloud services are optional, never required.
 - **Auditable and reproducible.** Schematics, bill of materials, firmware source and
   enclosure models under free licences, with build documentation detailed enough to
   reproduce a working node.
@@ -50,7 +57,7 @@ audit, deploy and keep running independently. This project aims to be that node.
 |---|---|---|
 | Accelerometer | STMicroelectronics **IIS3DWB** | DC–6.3 kHz flat bandwidth, 26.667 kHz ODR, 75 µg/√Hz noise density, ±2/4/8/16 g, SPI, −40…+105 °C, integrated temperature sensor |
 | MCU + radio | RAK Wireless **RAK3112** | ESP32-S3 + Semtech SX1262 in one certified module (LoRa 868 MHz, WiFi, BLE), 23×15 mm |
-| Power | TI **TPS7A02** LDO | 200 mA, ultra-low quiescent current |
+| Power | Diodes **AP2112K-3.3** LDO | 600 mA, SOT-23-5 (LCSC C51118) |
 
 ### Why these parts
 
@@ -93,7 +100,7 @@ signal fidelity than any amount of filtering afterwards.
 | `docs/` | Measurements, methodology, build notes |
 | `enclosure/` | Mounting pad and housing — CAD sources with open-format exports |
 | `tools/` | Design-check utilities, including a mirrored-footprint checker |
-| `hardware/` | Schematics and design files (published as they mature) |
+| `hardware/` | KiCad boards plus gerbers, BOM and pick-and-place files for both boards |
 
 ## Licences
 
@@ -106,7 +113,8 @@ signal fidelity than any amount of filtering afterwards.
 1. ~~Sensor and radio validated on hardware~~ — done, see [measurements](docs/measurements.md)
 2. Mechanical integration: sensor coupling, sealing, field-ready housing (pad and housing
    models [published](enclosure/); sealing details in progress)
-3. On-device FFT and envelope processing, LoRaWAN uplink with a versioned payload format
+3. On-device FFT and envelope processing, LoRa uplink with a versioned payload format
+   (LoRaWAN under evaluation)
 4. Characterisation against a reference accelerometer on a shaker
 5. Field deployment on real rotating equipment, with published measurement data
 6. Documented reproducible build — someone else assembles a node from this repository

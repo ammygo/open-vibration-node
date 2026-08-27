@@ -1,25 +1,45 @@
 # Hardware
 
-KiCad design files for the vibration sensing node.
+Two 28 mm round boards, joined by seven wires with the battery between them.
 
 Licence: CERN-OHL-W-2.0 — see [LICENSE.txt](LICENSE.txt).
 
-## Contents
+| Path | Board | Contents |
+|---|---|---|
+| `sensor-board/` | IIS3DWB accelerometer, bottom layer | KiCad board, gerbers, BOM, pick-and-place |
+| `radio-board/` | RAK3112 module (ESP32-S3 + SX1262), LDO | KiCad board, gerbers, BOM, CPL, pick-and-place |
 
-Nothing published yet. This directory will hold:
+The `production/` files under each board are the sets actually sent for fabrication and
+assembly — not idealised exports. Boards from these files have been manufactured and the
+sensor board verified on the bench ([measurements](../docs/measurements.md)).
 
-- `node/` — KiCad project: schematics, PCB layout, netlist
-- `bom/` — bill of materials with distributor part numbers
-- `production/` — Gerber files, drill files, pick-and-place data
-- `datasheets/` — datasheets for the main components used
+## Inter-board wiring
 
-## Design notes
+`GND`, `3V3`, `SPI_CS`, `SPI_SCK`, `SPI_MISO`, `SPI_MOSI`, `INT1`.
 
-The node carries a low-noise triaxial MEMS accelerometer, an nRF52840-class MCU with an
-SX1262 LoRa transceiver, and a power stage supporting either a primary lithium cell or a
-solar plus LiFePO4 arrangement.
+Pad order is identical on both boards, so the wires run straight across without crossing.
 
-Two constraints shape the layout: the accelerometer needs a mechanically stiff, direct
-coupling path to the mounting surface, and the radio needs a clean ground plane and
-keep-out area around the antenna. These pull in opposite directions on a small board, and
-the layout choices made to resolve that will be documented here as the design settles.
+## Layout constraints worth knowing
+
+Two requirements pull against each other on a 28 mm board, and the layout is the
+compromise between them:
+
+- The accelerometer needs a **short, stiff mechanical path** to the mounting surface,
+  which is why it sits on the bottom layer facing the measured surface rather than on top.
+- The radio needs a **clean ground plane and antenna keep-out**, which is why the module
+  sits on the top layer with the antenna facing away from the mounted metal.
+
+Splitting these onto two boards resolves the conflict; the cost is the seven-wire harness
+and the assembly step that goes with it.
+
+## Before you reorder these boards
+
+Run [`../tools/check_handedness.py`](../tools/README.md) against the sensor board. A
+mirrored bottom-layer footprint passes design rule checking and fabricator review and
+still cannot be assembled — that mistake cost three revisions here.
+
+## Bill of materials
+
+The BOM files carry LCSC part numbers where the boards were assembled with them, so the
+component selection can be reproduced directly. Prices, suppliers and order references are
+deliberately not included.

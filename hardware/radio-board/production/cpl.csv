@@ -1,0 +1,9 @@
+Designator,Mid X,Mid Y,Layer,Rotation
+U1,150mm,-100mm,Top,0
+U2,150mm,-108mm,Bottom,0
+C5,146mm,-108mm,Bottom,0
+C6,154mm,-108mm,Bottom,0
+C7,147mm,-99mm,Bottom,0
+C8,143mm,-95.5mm,Bottom,0
+C9,143mm,-99mm,Bottom,0
+R2,147mm,-95.5mm,Bottom,0
