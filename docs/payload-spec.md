@@ -1,6 +1,8 @@
 # Uplink payload specification — DRAFT v0
 
-> **Status: draft for discussion.** Nothing here is implemented yet. The format will be
+> **Status: draft for discussion.** The binary format is not transmitted yet; three of its
+> elements are already exercised by the interim bench protocol (see
+> [Bench protocol status](#bench-protocol-status-2-september-2026)). The format will be
 > versioned from the first real transmission, and this document will track it. Review and
 > criticism are welcome — open an issue.
 
@@ -14,6 +16,23 @@
   support mixed fleets.
 - Be trivially implementable by third parties: fixed offsets, no compression, integer
   fields with documented scale factors.
+
+## Bench protocol status (2 September 2026)
+
+The binary layout below remains the LoRaWAN target. The bench setup meanwhile runs an
+interim point-to-point text protocol (`VIB3 id=… n=… i=… a=… v=… c=… t=… e=…`) so the
+collector can be developed against real packets. Three items of this specification are
+already exercised there and will carry over unchanged:
+
+- **Sensor-health flag** (status bit 0): field `e=` is 1 whenever the accelerometer fails
+  identification or does not fill the FIFO. The collector then raises a "sensor fault"
+  alarm and suppresses diagnosis instead of reporting a healthy, silent machine.
+- **Reboot detection** (status bits 3 and 5): a sequence number that goes backwards is
+  logged as a reboot event; the node runs a 90 s task watchdog.
+- **Airtime budget:** at SF7 / BW 125 kHz / CR 4/7 an 85-byte text packet is 226 ms on
+  air. In the 869.4–869.65 MHz sub-band (10 % duty cycle) that caps the cadence at
+  ≥ 2.3 s; the node enforces a 3 s minimum (7.5 %). The 24-byte binary format is 86 ms on
+  air — one of the reasons it exists.
 
 ## Proposed layout (19 of 24 bytes used)
 

@@ -55,6 +55,38 @@ The tap test spans nearly three orders of magnitude without saturating and settl
 within a second, showing the acquisition chain has usable dynamic range and no ringing
 that would smear later spectral analysis.
 
+## Velocity RMS in the ISO 10816 band (added 2 September 2026)
+
+The node now reports vibration velocity RMS the way ISO 10816 / ISO 20816 define it:
+band-limited to 10–1000 Hz and computed on a gap-free 307 ms window (8192 samples at
+26.667 kHz) read from the sensor's hardware FIFO.
+
+Processing chain per axis: remove mean → 2nd-order Butterworth high-pass 8 Hz →
+trapezoidal integration to velocity → 2nd-order high-pass 8 Hz (removes integration
+drift) → 2nd-order low-pass 1000 Hz → RMS over the last 5462 samples (the first 2730 are
+discarded for filter settling). Two cascaded 8 Hz sections give a combined −3 dB point at
+10 Hz. The filters run in double precision: at fc/fs ≈ 3·10⁻⁴ a single-precision biquad
+loses its poles to rounding.
+
+Validation of the chain against synthetic signals (100 mg amplitude; exact velocity RMS =
+a / (2πf·√2)), reproducible with [`tools/vrms_filter_check.py`](../tools/vrms_filter_check.py):
+
+| Signal | Expected | From the chain | Error |
+|---|---|---|---|
+| 10 Hz (band edge, −3 dB) | 7.80 mm/s | 7.90 mm/s | +1.2 % |
+| 24.7 Hz (1480 rpm shaft rate) | 4.47 mm/s | 4.40 mm/s | −1.6 % |
+| 50 Hz | 2.21 mm/s | 2.19 mm/s | −0.6 % |
+| 100 Hz | 1.10 mm/s | 1.10 mm/s | +0.1 % |
+| 500 Hz | 0.221 mm/s | 0.214 mm/s | −3.1 % |
+| 1000 Hz (band edge, −3 dB) | 0.078 mm/s | 0.078 mm/s | −0.4 % |
+| 2 Hz, out of band (55 mm/s unfiltered) | — | 0.49 mm/s | rejected 110× |
+| 1000 mg DC offset + 24.7 Hz at 50 mg | 2.23 mm/s | 2.20 mm/s | −1.6 % |
+
+At rest on the bench the node reports 0.03–0.09 mm/s per axis: the 18 mg wideband noise
+floor collapses once the band is limited. The 8192-sample acquisition takes 306 ms
+(8192 / 26 667 Hz = 307 ms) — that timing is the permanent check that no samples were
+dropped; see the second erratum.
+
 ## Errata: sensor was running at the wrong rate
 
 The first published noise floor was ~1 mg RMS. That figure was real in the sense that the
@@ -82,6 +114,20 @@ wrote — read the register back and check the resulting sample rate, which the 
 here now do. Second, a measurement that looks better than physics allows is a bug report,
 not a result.
 
+## Errata 2: polled acquisition was dropping samples
+
+Until version 6 of the node firmware the per-packet metrics were computed from samples
+read one at a time by polling the data-ready flag over SPI. That loop sustains only about
+15 kS/s, so roughly 40 % of the 26.667 kHz samples were silently skipped — while the
+integration step still assumed 37.5 µs between samples. The FFT path was never affected
+(it used the FIFO from the start), but the trended velocity RMS was biased.
+
+It surfaced during a systems audit, not from a wrong-looking number: the time to fill a
+block did not match sample count ÷ rate. Everything time-domain now comes from the FIFO,
+and the firmware prints the block acquisition time on every cycle so the check cannot be
+forgotten. The lesson generalises the first erratum: verify the rate you *achieved*, not
+only the rate you configured.
+
 ## Not yet measured
 
 - Frequency response against a shaker with a calibrated reference accelerometer
@@ -94,4 +140,5 @@ not a result.
 The sketches under [`../firmware/tests/`](../firmware/tests/) produce these readings:
 `sensor_id` verifies the SPI link and part identity, `acquisition` streams mean, RMS and
 temperature, and `bench_demo` runs the full self-check sequence including the register
-read-back described above.
+read-back described above. The velocity-RMS filter chain and its validation table are
+reproduced by `tools/vrms_filter_check.py` (plain Python, no hardware needed).
