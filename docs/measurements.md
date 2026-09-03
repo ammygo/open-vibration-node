@@ -128,6 +128,19 @@ and the firmware prints the block acquisition time on every cycle so the check c
 forgotten. The lesson generalises the first erratum: verify the rate you *achieved*, not
 only the rate you configured.
 
+## Errata 3: bench cadence exceeded the duty-cycle limit
+
+For two days of bench testing the node transmitted every 2 s. An 85-byte packet at
+SF7 / BW 125 kHz / CR 4/7 is 226 ms on air, so that cadence occupied 11 % of the channel —
+above the 10 % permitted in the 869.4–869.65 MHz sub-band. Nothing flagged it: the radio
+does not refuse to transmit, and the receiver was a bench unit a metre away at 10 dBm.
+
+It was caught in the systems audit by computing time-on-air from the LoRa symbol formula
+instead of estimating it. The node, its downlink configuration path and the collector now
+all enforce a 3 s minimum (7.5 %), and the [payload specification](payload-spec.md#bench-protocol-status-2-september-2026)
+records the airtime budget so the limit is designed in rather than checked afterwards. The
+24-byte binary format planned for LoRaWAN is 86 ms on air — 4.3 % even at 2 s.
+
 ## Not yet measured
 
 - Frequency response against a shaker with a calibrated reference accelerometer

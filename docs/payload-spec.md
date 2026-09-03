@@ -32,7 +32,10 @@ already exercised there and will carry over unchanged:
 - **Airtime budget:** at SF7 / BW 125 kHz / CR 4/7 an 85-byte text packet is 226 ms on
   air. In the 869.4–869.65 MHz sub-band (10 % duty cycle) that caps the cadence at
   ≥ 2.3 s; the node enforces a 3 s minimum (7.5 %). The 24-byte binary format is 86 ms on
-  air — one of the reasons it exists.
+  air — one of the reasons it exists. Time on air: `T_sym = 2^SF / BW`,
+  `N_payload = 8 + max(ceil((8·PL − 4·SF + 28 + 16) / (4·SF)) · (CR + 4), 0)`,
+  `T = (12.25 + N_payload) · T_sym` for an 8-symbol preamble with explicit header and CRC
+  (see [measurements, Errata 3](measurements.md#errata-3-bench-cadence-exceeded-the-duty-cycle-limit)).
 
 ## Proposed layout (19 of 24 bytes used)
 
