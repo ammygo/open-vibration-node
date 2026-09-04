@@ -137,6 +137,7 @@ it is actually needed.
 | Path | Contents |
 |---|---|
 | `firmware/tests/` | Bench verification sketches — sensor identification and acquisition |
+| `firmware/bench-node/` | Interim point-to-point LoRa node and bench receiver — FIFO acquisition, ISO 10816 velocity RMS, health reporting, raw capture over WiFi |
 | `docs/` | Measurements, payload specification draft, build notes |
 | `enclosure/` | Mounting pad and housing — CAD sources with open-format exports |
 | `tools/` | Design-check utilities, including a mirrored-footprint checker |

@@ -6,7 +6,9 @@ Licence: MIT — see [../LICENSE](../LICENSE).
 
 ## Contents
 
-Bench sketches are under `tests/`. Still to come:
+Bench sketches are under `tests/`. The interim point-to-point node firmware used for bench
+characterisation is under [`bench-node/`](bench-node/) — its acquisition and processing core
+is what the LoRaWAN firmware will build on. Still to come:
 
 - `src/` — application and signal processing sources
 - `drivers/` — sensor and peripheral drivers
