@@ -128,8 +128,9 @@ So the node keeps a second path. The RAK3112 carries 8 MB of PSRAM, enough to ho
 looking at, an engineer standing next to the machine can trigger a capture and pull the
 raw recording off over WiFi, straight to a laptop — no cloud and no gateway involved.
 This path works on the bench as of September 2026: a downlink command makes the node record
-32768 samples per axis (1.23 s) from the sensor FIFO into PSRAM and post them over WiFi to
-the collector, which it locates by mDNS.
+32768 samples per axis (1.23 s — the PSRAM allows about 50 s; 1.23 s is the current capture
+length) from the sensor FIFO into PSRAM and post them over WiFi to the collector (the local
+server described above; a laptop also works), which it locates by mDNS.
 
 This is deliberately **on demand** rather than continuous: streaming raw data would end the
 battery budget within days. Routine monitoring stays cheap; full detail is available when
@@ -159,7 +160,10 @@ Timing is indicative and assumes part-time development; with project funding it 
 2. ~~Radio bring-up: SX1262 transmit and receive path~~ — done, September 2026: point-to-point
    LoRa link (869.525 MHz, SF7) in both directions, downlink-configurable cadence within the
    duty-cycle budget, on-demand raw capture over WiFi; velocity RMS in the ISO 10816 band
-   validated ([measurements](docs/measurements.md#velocity-rms-in-the-iso-10816-band-added-2-september-2026))
+   validated ([measurements](docs/measurements.md#velocity-rms-in-the-iso-10816-band-added-2-september-2026)).
+   The interim link terminates in a USB LoRa receiver on the collector (the local server
+   described under *Local-first*); milestone 4 replaces it with the SX1302 LoRaWAN gateway and
+   ChirpStack.
 3. Mechanical integration: sensor coupling, sealing, field-ready housing (pad and housing
    models [published](enclosure/); sealing details in progress) — winter 2026/27
 4. On-device FFT and envelope processing, LoRaWAN uplink with a versioned payload format

@@ -77,10 +77,13 @@ a / (2πf·√2)), reproducible with [`tools/vrms_filter_check.py`](../tools/vrm
 | 24.7 Hz (1480 rpm shaft rate) | 4.47 mm/s | 4.40 mm/s | −1.6 % |
 | 50 Hz | 2.21 mm/s | 2.19 mm/s | −0.6 % |
 | 100 Hz | 1.10 mm/s | 1.10 mm/s | +0.1 % |
-| 500 Hz | 0.221 mm/s | 0.214 mm/s | −3.1 % |
+| 500 Hz | 0.221 mm/s | 0.214 mm/s | −3.1 % ¹ |
 | 1000 Hz (band edge, −3 dB) | 0.078 mm/s | 0.078 mm/s | −0.4 % |
 | 2 Hz, out of band (55 mm/s unfiltered) | — | 0.49 mm/s | rejected 110× |
 | 1000 mg DC offset + 24.7 Hz at 50 mg | 2.23 mm/s | 2.20 mm/s | −1.6 % |
+
+¹ Expected, not an error: at half its corner frequency the second-order 1000 Hz low-pass
+already attenuates by |H| = 1/√(1 + 0.5⁴) = 0.970.
 
 At rest on the bench the node reports 0.03–0.09 mm/s per axis: the 18 mg wideband noise
 floor collapses once the band is limited. The 8192-sample acquisition takes 306 ms
