@@ -3,9 +3,9 @@
 Point-to-point LoRa firmware used for bench characterisation and the collector development.
 It already implements the parts of the node that do not depend on the network layer — FIFO
 acquisition, ISO 10816 velocity RMS, health reporting, watchdog, raw capture over WiFi — and
-transmits a plain-text summary over raw LoRa. The LoRaWAN node firmware (milestone 2 of the
-proposal) will reuse this acquisition and processing core and replace the radio layer with a
-LoRaWAN stack and the [binary payload](../../docs/payload-spec.md).
+transmits a plain-text summary over raw LoRa. The LoRaWAN node firmware (roadmap item 4:
+on-device FFT and LoRaWAN uplink) will reuse this acquisition and processing core and replace
+the radio layer with a LoRaWAN stack and the [binary payload](../../docs/payload-spec.md).
 
 Two sketches:
 
@@ -101,7 +101,7 @@ Radio, both ends: 869.525 MHz, BW 125 kHz, SF7, CR 4/7, sync word 0x12, 10 dBm.
 
 No encryption, no addressing beyond the node id, no acknowledgements, one receiver — this is
 a bench link. Those are exactly the things LoRaWAN provides, which is why the network layer
-is the next milestone rather than an extension of this sketch.
+is a separate roadmap item rather than an extension of this sketch.
 
 ## Provenance
 

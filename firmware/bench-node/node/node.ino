@@ -1,8 +1,8 @@
 // Open Vibration Node — bench node firmware v6 (RAK3112: ESP32-S3 + SX1262 + IIS3DWB)
 //
 // Interim point-to-point LoRa firmware used for bench characterisation. The LoRaWAN node
-// firmware (proposal milestone) will reuse the acquisition and processing core below and
-// replace the radio layer. See README.md in this folder.
+// firmware (roadmap item 4 in the top-level README) will reuse the acquisition and processing
+// core below and replace the radio layer. See README.md in this folder.
 //
 // Every cycle:
 //  - reads a gap-free 8192-sample window (307 ms) from the IIS3DWB hardware FIFO. Polling
