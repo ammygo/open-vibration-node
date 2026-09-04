@@ -127,6 +127,10 @@ So the node keeps a second path. The RAK3112 carries 8 MB of PSRAM, enough to ho
 50 seconds of the full 26.667 kHz three-axis stream. When something in the trend needs
 looking at, an engineer standing next to the machine can trigger a capture and pull the
 raw recording off over WiFi, straight to a laptop — no cloud and no gateway involved.
+This path works on the bench as of September 2026: a downlink command makes the node record
+32768 samples per axis (1.23 s — the PSRAM allows about 50 s; 1.23 s is the current capture
+length) from the sensor FIFO into PSRAM and post them over WiFi to the collector (the local
+server described above; a laptop also works), which it locates by mDNS.
 
 This is deliberately **on demand** rather than continuous: streaming raw data would end the
 battery budget within days. Routine monitoring stays cheap; full detail is available when
@@ -139,7 +143,7 @@ it is actually needed.
 | `firmware/tests/` | Bench verification sketches — sensor identification and acquisition |
 | `docs/` | Measurements, payload specification draft, build notes |
 | `enclosure/` | Mounting pad and housing — CAD sources with open-format exports |
-| `tools/` | Design-check utilities, including a mirrored-footprint checker |
+| `tools/` | Design-check utilities: a mirrored-footprint checker and the velocity-RMS filter validation script |
 | `hardware/` | KiCad boards plus gerbers, BOM and pick-and-place files for both boards |
 
 ## Licences
@@ -153,11 +157,20 @@ it is actually needed.
 Timing is indicative and assumes part-time development; with project funding it compresses.
 
 1. ~~Sensor board validated on hardware~~ — done, August 2026 ([measurements](docs/measurements.md))
-2. Radio bring-up: SX1262 transmit and receive path — autumn 2026
+2. ~~Radio bring-up: SX1262 transmit and receive path~~ — done, September 2026: point-to-point
+   LoRa link (869.525 MHz, SF7) in both directions, downlink-configurable cadence within the
+   duty-cycle budget, on-demand raw capture over WiFi; velocity RMS in the ISO 10816 band
+   validated ([measurements](docs/measurements.md#velocity-rms-in-the-iso-10816-band-added-2-september-2026)).
+   The interim link terminates in a USB LoRa receiver on the collector (the local server
+   described under *Local-first*); roadmap item 4 replaces it with the SX1302 LoRaWAN gateway
+   and ChirpStack.
 3. Mechanical integration: sensor coupling, sealing, field-ready housing (pad and housing
    models [published](enclosure/); sealing details in progress) — winter 2026/27
 4. On-device FFT and envelope processing, LoRaWAN uplink with a versioned payload format
-   ([draft specification](docs/payload-spec.md)) — spring 2027
+   ([draft specification](docs/payload-spec.md)) — spring 2027. *Interim: FFT, envelope and
+   waterfall spectra are computed on the collector from FIFO captures; each packet already
+   carries band-limited velocity RMS, crest factor and a sensor-health flag
+   ([status](docs/payload-spec.md#bench-protocol-status-2-september-2026)).*
 5. Characterisation against a reference accelerometer on a shaker — spring/summer 2027
 6. Field deployment on real rotating equipment, with published measurement data — second
    half of 2027

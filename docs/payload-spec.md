@@ -1,6 +1,8 @@
 # Uplink payload specification — DRAFT v0
 
-> **Status: draft for discussion.** Nothing here is implemented yet. The format will be
+> **Status: draft for discussion.** The binary format is not transmitted yet; three of its
+> elements are already exercised by the interim bench protocol (see
+> [Bench protocol status](#bench-protocol-status-2-september-2026)). The format will be
 > versioned from the first real transmission, and this document will track it. Review and
 > criticism are welcome — open an issue.
 
@@ -14,6 +16,33 @@
   support mixed fleets.
 - Be trivially implementable by third parties: fixed offsets, no compression, integer
   fields with documented scale factors.
+
+## Bench protocol status (2 September 2026)
+
+The binary layout below remains the LoRaWAN target. The bench setup meanwhile runs an
+interim point-to-point text protocol (`VIB3 id=… n=… i=… a=… v=… c=… t=… e=…`) so the
+collector can be developed against real packets. Three items of this specification are
+already exercised there and will carry over unchanged:
+
+- **Sensor-health flag** (the inverse of status bit 0, which is set when the sensor is
+  healthy): field `e=` is 1 whenever the accelerometer fails
+  identification or does not fill the FIFO. The collector then raises a "sensor fault"
+  alarm and suppresses diagnosis instead of reporting a healthy, silent machine.
+- **Reboot detection** (what status bits 3 and 5 will carry): for now the collector infers
+  a reboot from a sequence number that goes backwards; the node runs a 90 s task watchdog.
+- **Airtime budget:** at SF7 / BW 125 kHz / CR 4/7 an 85-byte text packet is 226 ms on
+  air. In the 869.4–869.65 MHz sub-band (10 % duty cycle) that caps the cadence at
+  ≥ 2.3 s; the node enforces a 3 s minimum (7.5 %). The 24-byte binary format is 86 ms on
+  air — one of the reasons it exists. Time on air: `T_sym = 2^SF / BW`,
+  `N_payload = 8 + max(ceil((8·PL − 4·SF + 28 + 16) / (4·SF)) · (CR + 4), 0)`,
+  `T = (12.25 + N_payload) · T_sym` for an 8-symbol preamble with explicit header and CRC
+  (see [measurements, Errata 3](measurements.md#errata-3-bench-cadence-exceeded-the-duty-cycle-limit)).
+- **LoRaWAN target:** EU868 uplink channels sit in 1 % sub-bands, and a LoRaWAN frame adds
+  13 bytes of MAC header and MIC to the payload. A 24-byte payload (37-byte frame) at SF7
+  with CR 4/5 is 82 ms on air, which allows an uplink roughly every 8 s; at SF12 it is
+  2.0 s on air, one uplink every ~3.3 minutes. That budget — not the bench link — is what
+  sets the summary cadence design. The 10 % sub-band used by the bench link at
+  869.525 MHz is reserved in LoRaWAN for RX2 downlinks.
 
 ## Proposed layout (19 of 24 bytes used)
 
