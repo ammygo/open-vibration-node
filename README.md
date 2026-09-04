@@ -162,8 +162,8 @@ Timing is indicative and assumes part-time development; with project funding it 
    duty-cycle budget, on-demand raw capture over WiFi; velocity RMS in the ISO 10816 band
    validated ([measurements](docs/measurements.md#velocity-rms-in-the-iso-10816-band-added-2-september-2026)).
    The interim link terminates in a USB LoRa receiver on the collector (the local server
-   described under *Local-first*); milestone 4 replaces it with the SX1302 LoRaWAN gateway and
-   ChirpStack.
+   described under *Local-first*); roadmap item 4 replaces it with the SX1302 LoRaWAN gateway
+   and ChirpStack.
 3. Mechanical integration: sensor coupling, sealing, field-ready housing (pad and housing
    models [published](enclosure/); sealing details in progress) — winter 2026/27
 4. On-device FFT and envelope processing, LoRaWAN uplink with a versioned payload format
